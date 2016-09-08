@@ -37,12 +37,43 @@ class FUNCTION(SEXPR):
         return self.__func(env, *args)
 
 
+class Symbol(SEXPR):
+    def __init__(self, key):
+        self.__key = key
+
+    def eval(self, env):
+        return env.lookup(self)
+
+    @property
+    def key(self):
+        return self.__key
+
+    def __eq__(self, other):
+        return self.__key == other.__key
+
+    def __ne__(self, other):
+        return self.__key != other.__key
+
+    def __hash__(self):
+        return hash(self.__key)
+
+    def __str__(self):
+        return '{}:{}'.format(type(self).__name__,
+                              str(self.__key))
+
+
 class VALUE0(SEXPR):
     def __init__(self):
         pass
 
     def eval(self, env):
         return self
+
+    def __eq__(self, other):
+        return type(self) == type(other)
+
+    def __ne__(self, other):
+        return type(self) != type(other)
 
 
 class VALUE1(SEXPR):
@@ -55,6 +86,15 @@ class VALUE1(SEXPR):
     @property
     def value(self):
         return self.__value
+
+    def __eq__(self, other):
+        return self.__value == other.__value
+
+    def __ne__(self, other):
+        return self.__value != other.__value
+
+    def __hash__(self):
+        return hash(self.__value)
 
     def __str__(self):
         return '{}:{}'.format(type(self).__name__,
