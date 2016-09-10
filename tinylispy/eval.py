@@ -13,6 +13,13 @@ class LIST(SEXPR):
     def eval(self, env):
         return self.__lst[0].eval(env).apply(env, *self.__lst[1:])
 
+    def __hash__(self):
+        return hash(self.__lst)
+
+    def __str__(self):
+        return '{}:[{}]'.format(type(self).__name__,
+                                str(','.join(str(x) for x in list(self.__lst))))
+
 
 class SPECIAL_FORM(SEXPR):
     def __init__(self, proc):
@@ -37,7 +44,7 @@ class FUNCTION(SEXPR):
         return self.__func(env, *args)
 
 
-class Symbol(SEXPR):
+class SYMBOL(SEXPR):
     def __init__(self, key):
         self.__key = key
 

@@ -6,3 +6,9 @@ The tiny lisp interpreter written by python3
 ```
 $ nosetests -sv
 ```
+
+### todo
+- lambda
+- user-defined functions
+- quote
+- macro

@@ -31,15 +31,15 @@ def test_pos2():
 
 def test_pos3():
     env = Env({})
-    env.push({Symbol('foo'): NUMBER(100)})
-    actual = Symbol('foo').eval(env)
+    env.push({SYMBOL('foo'): NUMBER(100)})
+    actual = SYMBOL('foo').eval(env)
     expected = NUMBER(100)
     ok_(actual, expected)
 
 
 def test_pos4():
-    env = Env({Symbol('if'): SPECIAL_FORM(sf_if)})
-    actual = LIST(Symbol('if'),
+    env = Env({SYMBOL('if'): SPECIAL_FORM(sf_if)})
+    actual = LIST(SYMBOL('if'),
                   TRUE(),
                   NUMBER(10),
                   NUMBER(20)).eval(env)
@@ -48,8 +48,8 @@ def test_pos4():
 
 
 def test_pos5():
-    env = Env({Symbol('add'): FUNCTION(fn_add)})
-    actual = LIST(Symbol('add'),
+    env = Env({SYMBOL('add'): FUNCTION(fn_add)})
+    actual = LIST(SYMBOL('add'),
                   NUMBER(10),
                   NUMBER(20)).eval(env)
     expected = NUMBER(30)
