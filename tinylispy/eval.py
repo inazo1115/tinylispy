@@ -11,7 +11,7 @@ class LIST(SEXPR):
         self.__lst = lst
 
     def eval(self, env):
-        return self.__lst[0].apply(env, *self.__lst[1:])
+        return self.__lst[0].eval(env).apply(env, *self.__lst[1:])
 
 
 class SPECIAL_FORM(SEXPR):

@@ -35,3 +35,22 @@ def test_pos3():
     actual = Symbol('foo').eval(env)
     expected = NUMBER(100)
     ok_(actual, expected)
+
+
+def test_pos4():
+    env = Env({Symbol('if'): SPECIAL_FORM(sf_if)})
+    actual = LIST(Symbol('if'),
+                  TRUE(),
+                  NUMBER(10),
+                  NUMBER(20)).eval(env)
+    expected = NUMBER(10)
+    ok_(actual, expected)
+
+
+def test_pos5():
+    env = Env({Symbol('add'): FUNCTION(fn_add)})
+    actual = LIST(Symbol('add'),
+                  NUMBER(10),
+                  NUMBER(20)).eval(env)
+    expected = NUMBER(30)
+    ok_(actual, expected)
