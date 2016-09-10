@@ -2,7 +2,7 @@
 
 import re
 
-from tinylispy.eval import *
+from eval import *
 
 
 def read_list(expr):
