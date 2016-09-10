@@ -3,16 +3,16 @@
 
 import sys
 
+from env import Env
 from eval import *
 from read import *
-from env import Env
 
 
 def sf_if(env, *args):
     if len(args) != 3:
         raise Exception('Malformed if')
     cond = args[0].eval(env)
-    if isinstance(cond, TRUE):
+    if cond == TRUE():
         return args[1].eval(env)
     return args[2].eval(env)
 
@@ -71,28 +71,27 @@ def fn_println(env, *args):
 
 
 def make_global_env():
-    return Env({SYMBOL('true')    : TRUE(),
-                SYMBOL('nil')     : NIL(),
-                SYMBOL('if')      : SPECIAL_FORM(sf_if),
-                SYMBOL('quote')   : SPECIAL_FORM(sf_quote),
-                SYMBOL('add')     : FUNCTION(fn_add),
-                SYMBOL('sub')     : FUNCTION(fn_sub),
-                SYMBOL('mul')     : FUNCTION(fn_mul),
-                SYMBOL('div')     : FUNCTION(fn_div),
-                SYMBOL('mod')     : FUNCTION(fn_mod),
-                SYMBOL('minus')   : FUNCTION(fn_minus),
-                SYMBOL('println') : FUNCTION(fn_println)})
+    return {SYMBOL('true')    : TRUE(),
+            SYMBOL('nil')     : NIL(),
+            SYMBOL('if')      : SPECIAL_FORM(sf_if),
+            SYMBOL('quote')   : SPECIAL_FORM(sf_quote),
+            SYMBOL('add')     : FUNCTION(fn_add),
+            SYMBOL('sub')     : FUNCTION(fn_sub),
+            SYMBOL('mul')     : FUNCTION(fn_mul),
+            SYMBOL('div')     : FUNCTION(fn_div),
+            SYMBOL('mod')     : FUNCTION(fn_mod),
+            SYMBOL('minus')   : FUNCTION(fn_minus),
+            SYMBOL('println') : FUNCTION(fn_println)}
 
 
 def repl():
-    env = make_global_env()
+    env = Env(make_global_env())
     while True:
         print('tinylispy >>> ', end='', flush=True)
-        expr = sys.stdin.readline()
+        expr = sys.stdin.readline().strip()
         ast = read_expr(expr)[0]
         res = ast.eval(env)
         print(res)
-
 
 if __name__ == '__main__':
     repl()

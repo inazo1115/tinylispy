@@ -6,6 +6,9 @@ from eval import *
 
 
 def read_list(expr):
+    """
+    e.g. (foo bar baz)
+    """
     ret = []
     rest = expr[1:]
     while True:
