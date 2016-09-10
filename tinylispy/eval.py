@@ -13,6 +13,9 @@ class LIST(SEXPR):
     def eval(self, env):
         return self.__lst[0].eval(env).apply(env, *self.__lst[1:])
 
+    def __eq__(self, other):
+        return self.__lst == other.__lst
+
     def __hash__(self):
         return hash(self.__lst)
 
@@ -42,31 +45,6 @@ class FUNCTION(SEXPR):
     def apply(self, env, *args):
         args = [x.eval(env) for x in args]
         return self.__func(env, *args)
-
-
-class SYMBOL(SEXPR):
-    def __init__(self, key):
-        self.__key = key
-
-    def eval(self, env):
-        return env.lookup(self)
-
-    @property
-    def key(self):
-        return self.__key
-
-    def __eq__(self, other):
-        return self.__key == other.__key
-
-    def __ne__(self, other):
-        return self.__key != other.__key
-
-    def __hash__(self):
-        return hash(self.__key)
-
-    def __str__(self):
-        return '{}:{}'.format(type(self).__name__,
-                              str(self.__key))
 
 
 class VALUE0(SEXPR):
@@ -106,6 +84,11 @@ class VALUE1(SEXPR):
     def __str__(self):
         return '{}:{}'.format(type(self).__name__,
                               str(self.__value))
+
+
+class SYMBOL(VALUE1):
+    def eval(self, env):
+        return env.lookup(self)
 
 
 class TRUE(VALUE0):

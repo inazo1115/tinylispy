@@ -2,7 +2,7 @@
 
 import re
 
-from eval import *
+from tinylispy.eval import *
 
 
 def read_list(expr):
@@ -44,7 +44,8 @@ def read_string(expr):
     e.g. "foo"
     """
     m = re.match('^"[a-zA-Z_]\w*"', expr)
-    ret = STRING(str(expr[:m.end()]))
+    quoted_str = str(expr[:m.end()])
+    ret = STRING(quoted_str[1:-1])
     rest = expr[m.end():]
     return ret, rest
 
@@ -71,10 +72,3 @@ def read_expr(expr):
     if c == ')':
         return '<close_paren>', expr[1:]
     raise Exception("Unexpected expr: '{}'".format(expr))
-
-
-if __name__ == '__main__':
-    print(read_list('(1 2 (3))')[0])
-    print(read_list('("foo" 1 2)')[0])
-    print(read_list('(if true 1 2)')[0])
-    print(NUMBER(1))
