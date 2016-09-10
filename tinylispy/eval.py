@@ -105,26 +105,3 @@ class NUMBER(VALUE1):
 
 class STRING(VALUE1):
     pass
-
-
-def sf_if(env, *args):
-    if len(args) != 3:
-        raise Exception('Malformed if')
-    cond = args[0].eval(env)
-    if isinstance(cond, TRUE):
-        return args[1].eval(env)
-    return args[2].eval(env)
-
-
-def fn_add(env, *args):
-    ret = 0
-    for i in args:
-        ret += i.value
-    return NUMBER(ret)
-
-
-def fn_println(env, *args):
-    if len(args) != 1:
-        raise Exception('Malformed println')
-    print(args[0])
-    return NIL()

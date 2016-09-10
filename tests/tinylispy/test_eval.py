@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import sys
+sys.path.append('./tinylispy')
+
 from nose.tools import eq_, ok_
 
 from tinylispy.env import Env
 from tinylispy.eval import *
+from tinylispy.main import *
 
 
 def test_eval_pos0():

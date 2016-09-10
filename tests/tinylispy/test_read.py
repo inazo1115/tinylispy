@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import sys
+sys.path.append('./tinylispy')
+
 from nose.tools import eq_, ok_
 
 from tinylispy.read import *
