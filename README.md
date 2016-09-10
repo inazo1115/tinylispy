@@ -2,8 +2,9 @@
 
 The tiny lisp interpreter written by python3
 
-#### unit tests
+#### dev commands
 ```
+# unit tests
 $ nosetests -sv
 ```
 
