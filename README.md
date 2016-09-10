@@ -18,5 +18,4 @@ $ nosetests -sv
 #### todo
 - lambda
 - user-defined functions
-- quote
 - macro

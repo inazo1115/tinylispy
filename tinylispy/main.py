@@ -17,6 +17,12 @@ def sf_if(env, *args):
     return args[2].eval(env)
 
 
+def sf_quote(env, *args):
+    if len(args) != 1:
+        raise Exception('Malformed quote')
+    return args[0]
+
+
 def fn_add(env, *args):
     ret = 0
     for i in args:
@@ -68,6 +74,7 @@ def make_global_env():
     return Env({SYMBOL('true')    : TRUE(),
                 SYMBOL('nil')     : NIL(),
                 SYMBOL('if')      : SPECIAL_FORM(sf_if),
+                SYMBOL('quote')   : SPECIAL_FORM(sf_quote),
                 SYMBOL('add')     : FUNCTION(fn_add),
                 SYMBOL('sub')     : FUNCTION(fn_sub),
                 SYMBOL('mul')     : FUNCTION(fn_mul),
