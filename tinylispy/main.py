@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+
 from eval import *
 from read import *
 from env import Env
@@ -23,7 +25,7 @@ def fn_add(env, *args):
 
 
 def fn_sub(env, *args):
-    ret = args[0]
+    ret = args[0].value
     for i in args[1:]:
         ret -= i.value
     return NUMBER(ret)
@@ -37,7 +39,7 @@ def fn_mul(env, *args):
 
 
 def fn_div(env, *args):
-    ret = args[0]
+    ret = args[0].value
     for i in args[1:]:
         ret /= i.value
     return NUMBER(ret)
@@ -75,7 +77,15 @@ def make_global_env():
                 SYMBOL('println') : FUNCTION(fn_println)})
 
 
+def repl():
+    env = make_global_env()
+    while True:
+        print('tinylispy >>> ', end='', flush=True)
+        expr = sys.stdin.readline()
+        ast = read_expr(expr)[0]
+        res = ast.eval(env)
+        print(res)
+
+
 if __name__ == '__main__':
-    ast = read_expr('(if nil (add 1 2) (mul 3 4))')[0]
-    res = ast.eval(make_global_env())
-    print(res)
+    repl()
