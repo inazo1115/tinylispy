@@ -23,6 +23,27 @@ def sf_quote(env, *args):
     return args[0]
 
 
+def sf_lambda(env, *args):
+    """
+    e.g. (lambda (x y) (add x y))
+    """
+    return PROCEDURE(*args)
+
+
+def sf_define(env, *args):
+    if len(args) != 2:
+        raise Exception('Malformed define')
+    env.define(args[0], args[1].eval(env))
+    return NIL()
+
+
+def sf_update(env, *args):
+    if len(args) != 2:
+        raise Exception('Malformed update')
+    env.update(args[0], args[1])
+    return NIL()
+
+
 def fn_add(env, *args):
     ret = 0
     for i in args:
@@ -75,6 +96,9 @@ def make_global_env():
             SYMBOL('nil')     : NIL(),
             SYMBOL('if')      : SPECIAL_FORM(sf_if),
             SYMBOL('quote')   : SPECIAL_FORM(sf_quote),
+            SYMBOL('lambda')  : SPECIAL_FORM(sf_lambda),
+            SYMBOL('define')  : SPECIAL_FORM(sf_define),
+            SYMBOL('update')  : SPECIAL_FORM(sf_update),
             SYMBOL('add')     : FUNCTION(fn_add),
             SYMBOL('sub')     : FUNCTION(fn_sub),
             SYMBOL('mul')     : FUNCTION(fn_mul),
@@ -87,9 +111,11 @@ def make_global_env():
 def repl():
     env = Env(make_global_env())
     while True:
-        print('tinylispy >>> ', end='', flush=True)
+        print('tinylispy>>> ', end='', flush=True)
         expr = sys.stdin.readline().strip()
+        print(expr)
         ast = read_expr(expr)[0]
+        print(ast)
         res = ast.eval(env)
         print(res)
 

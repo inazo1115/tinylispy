@@ -13,6 +13,10 @@ class LIST(SEXPR):
     def eval(self, env):
         return self.__lst[0].eval(env).apply(env, *self.__lst[1:])
 
+    @property
+    def value(self):
+        return self.__lst
+
     def __eq__(self, other):
         return self.__lst == other.__lst
 
@@ -45,6 +49,32 @@ class FUNCTION(SEXPR):
     def apply(self, env, *args):
         args = [x.eval(env) for x in args]
         return self.__func(env, *args)
+
+
+class PROCEDURE(SEXPR):
+    def __init__(self, *args):
+        self.__params = args[0].value
+        self.__bodys = args[1:]
+
+    def eval(self, env):
+        return self
+
+    def apply(self, env, *args):
+        if len(self.__params) != len(args):
+            raise Exception('Number of args is wrong')
+
+        args = [x.eval(env) for x in args]
+        new_flame = {}
+        for k, v in zip(self.__params, args):
+            new_flame[k] = v
+        env.push(new_flame)
+
+        ret = NIL()
+        for proc in self.__bodys:
+            ret = proc.eval(env)
+        env.pop()
+
+        return ret
 
 
 class VALUE0(SEXPR):
