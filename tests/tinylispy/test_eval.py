@@ -17,7 +17,7 @@ def test_eval_pos0():
 
 
 def test_eval_pos1():
-    actual = LIST(FUNCTION(fn_add),
+    actual = LIST(PRIMITIVE_FUNC(fn_add),
                   NUMBER(1),
                   NUMBER(2)).eval(Env({}))
     expected = NUMBER(3)
@@ -34,8 +34,7 @@ def test_eval_pos2():
 
 
 def test_eval_pos3():
-    env = Env({})
-    env.push({SYMBOL('foo'): NUMBER(100)})
+    env = Env({SYMBOL('foo'): NUMBER(100)})
     actual = SYMBOL('foo').eval(env)
     expected = NUMBER(100)
     eq_(actual, expected)
@@ -52,7 +51,7 @@ def test_eval_pos4():
 
 
 def test_eval_pos5():
-    env = Env({SYMBOL('add'): FUNCTION(fn_add)})
+    env = Env({SYMBOL('add'): PRIMITIVE_FUNC(fn_add)})
     actual = LIST(SYMBOL('add'),
                   NUMBER(10),
                   NUMBER(20)).eval(env)

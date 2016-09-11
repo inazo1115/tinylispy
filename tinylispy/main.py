@@ -27,7 +27,7 @@ def sf_lambda(env, *args):
     """
     e.g. (lambda (x y) (add x y))
     """
-    return PROCEDURE(*args)
+    return PROCEDURE(env, *args)
 
 
 def sf_define(env, *args):
@@ -40,7 +40,7 @@ def sf_define(env, *args):
 def sf_update(env, *args):
     if len(args) != 2:
         raise Exception('Malformed update')
-    env.update(args[0], args[1])
+    env.update(args[0], args[1].eval(env))
     return NIL()
 
 
@@ -91,7 +91,7 @@ def fn_println(env, *args):
     return NIL()
 
 
-def make_global_env():
+def make_global_flame():
     return {SYMBOL('true')    : TRUE(),
             SYMBOL('nil')     : NIL(),
             SYMBOL('if')      : SPECIAL_FORM(sf_if),
@@ -99,25 +99,24 @@ def make_global_env():
             SYMBOL('lambda')  : SPECIAL_FORM(sf_lambda),
             SYMBOL('define')  : SPECIAL_FORM(sf_define),
             SYMBOL('update')  : SPECIAL_FORM(sf_update),
-            SYMBOL('add')     : FUNCTION(fn_add),
-            SYMBOL('sub')     : FUNCTION(fn_sub),
-            SYMBOL('mul')     : FUNCTION(fn_mul),
-            SYMBOL('div')     : FUNCTION(fn_div),
-            SYMBOL('mod')     : FUNCTION(fn_mod),
-            SYMBOL('minus')   : FUNCTION(fn_minus),
-            SYMBOL('println') : FUNCTION(fn_println)}
+            SYMBOL('add')     : PRIMITIVE_FUNC(fn_add),
+            SYMBOL('sub')     : PRIMITIVE_FUNC(fn_sub),
+            SYMBOL('mul')     : PRIMITIVE_FUNC(fn_mul),
+            SYMBOL('div')     : PRIMITIVE_FUNC(fn_div),
+            SYMBOL('mod')     : PRIMITIVE_FUNC(fn_mod),
+            SYMBOL('minus')   : PRIMITIVE_FUNC(fn_minus),
+            SYMBOL('println') : PRIMITIVE_FUNC(fn_println)}
 
 
 def repl():
-    env = Env(make_global_env())
+    global_env = Env(make_global_flame())
     while True:
         print('tinylispy>>> ', end='', flush=True)
         expr = sys.stdin.readline().strip()
-        print(expr)
         ast = read_expr(expr)[0]
-        print(ast)
-        res = ast.eval(env)
+        res = ast.eval(global_env)
         print(res)
+
 
 if __name__ == '__main__':
     repl()
