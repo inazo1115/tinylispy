@@ -110,13 +110,13 @@ def make_global_flame():
 
 
 def repl():
-    global_env = Env(make_global_flame())
+    env = Env(make_global_flame())
     while True:
         try:
             print('tinylispy>>> ', end='', flush=True)
             expr = sys.stdin.readline().strip()
             ast = read_expr(expr)[0]
-            res = ast.eval(global_env)
+            res = ast.eval(env)
             print(res)
         except Exception as e:
             print(str(e))
