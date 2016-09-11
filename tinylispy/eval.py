@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from env import Env
+
 
 class SEXPR:
     def __str__(self):
@@ -12,6 +14,10 @@ class LIST(SEXPR):
 
     def eval(self, env):
         return self.__lst[0].eval(env).apply(env, *self.__lst[1:])
+
+    @property
+    def value(self):
+        return self.__lst
 
     def __eq__(self, other):
         return self.__lst == other.__lst
@@ -35,7 +41,7 @@ class SPECIAL_FORM(SEXPR):
         return self.__proc(env, *args)
 
 
-class FUNCTION(SEXPR):
+class PRIMITIVE_FUNC(SEXPR):
     def __init__(self, func):
         self.__func = func
 
@@ -45,6 +51,31 @@ class FUNCTION(SEXPR):
     def apply(self, env, *args):
         args = [x.eval(env) for x in args]
         return self.__func(env, *args)
+
+
+class PROCEDURE(SEXPR):
+    def __init__(self, env, *args):
+        self.__params = args[0].value
+        self.__bodys = args[1:]
+        self.__new_flame = {}
+        self.__new_env = Env(self.__new_flame, outer=env)
+
+    def eval(self, env):
+        return self
+
+    def apply(self, env, *args):
+        if len(self.__params) != len(args):
+            raise Exception('Number of args is wrong')
+
+        _args = [x.eval(env) for x in args]
+        for k, v in zip(self.__params, _args):
+            self.__new_flame[k] = v
+
+        ret = NIL()
+        for proc in self.__bodys:
+            ret = proc.eval(self.__new_env)
+
+        return ret
 
 
 class VALUE0(SEXPR):
