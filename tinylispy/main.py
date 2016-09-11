@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import traceback
 
 from env import Env
 from eval import *
@@ -111,11 +112,15 @@ def make_global_flame():
 def repl():
     global_env = Env(make_global_flame())
     while True:
-        print('tinylispy>>> ', end='', flush=True)
-        expr = sys.stdin.readline().strip()
-        ast = read_expr(expr)[0]
-        res = ast.eval(global_env)
-        print(res)
+        try:
+            print('tinylispy>>> ', end='', flush=True)
+            expr = sys.stdin.readline().strip()
+            ast = read_expr(expr)[0]
+            res = ast.eval(global_env)
+            print(res)
+        except Exception as e:
+            print(str(e))
+#            print(traceback.format_exc())
 
 
 if __name__ == '__main__':
