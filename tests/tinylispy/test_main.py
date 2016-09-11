@@ -20,21 +20,21 @@ def test_main_pos0():
 
 
 def test_main_pos1():
-    env = Env(make_global_flame())
+    env = Env(make_global_frame())
     actual = read_expr('((lambda (x) (add x x)) 10)')[0].eval(env)
     expected = NUMBER(20)
     eq_(actual, expected)
 
 
 def test_main_pos2():
-    env = Env(make_global_flame())
+    env = Env(make_global_frame())
     actual = read_expr('((lambda (x y) (add x y)) 10 20)')[0].eval(env)
     expected = NUMBER(30)
     eq_(actual, expected)
 
 
 def test_main_pos3():
-    env = Env(make_global_flame())
+    env = Env(make_global_frame())
     make_counter = """
     ((lambda ()
              (define counter
@@ -52,7 +52,7 @@ def test_main_pos3():
 
 
 def test_main_pos4():
-    env = Env(make_global_flame())
+    env = Env(make_global_frame())
     make_counter = """
     ((lambda ()
              (define counter

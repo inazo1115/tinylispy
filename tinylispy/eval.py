@@ -57,8 +57,8 @@ class PROCEDURE(SEXPR):
     def __init__(self, env, *args):
         self.__params = args[0].value
         self.__bodys = args[1:]
-        self.__new_flame = {}
-        self.__new_env = Env(self.__new_flame, outer=env)
+        self.__new_frame = {}
+        self.__new_env = Env(self.__new_frame, outer=env)
 
     def eval(self, env):
         return self
@@ -69,7 +69,7 @@ class PROCEDURE(SEXPR):
 
         _args = [x.eval(env) for x in args]
         for k, v in zip(self.__params, _args):
-            self.__new_flame[k] = v
+            self.__new_frame[k] = v
 
         ret = NIL()
         for proc in self.__bodys:

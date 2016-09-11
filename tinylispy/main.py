@@ -92,7 +92,7 @@ def fn_println(env, *args):
     return NIL()
 
 
-def make_global_flame():
+def make_global_frame():
     return {SYMBOL('true')    : TRUE(),
             SYMBOL('nil')     : NIL(),
             SYMBOL('if')      : SPECIAL_FORM(sf_if),
@@ -110,7 +110,7 @@ def make_global_flame():
 
 
 def repl():
-    env = Env(make_global_flame())
+    env = Env(make_global_frame())
     while True:
         try:
             print('tinylispy>>> ', end='', flush=True)
